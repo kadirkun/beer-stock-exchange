@@ -1,0 +1,52 @@
+[
+	{
+		"id": 0,
+		"name": "kadir birası",
+		"description": "Haramda gözü olanlara",
+		"price": {
+			"min": 3,
+			"max": 7,
+			"current": 5.5
+		}
+	},
+	{
+		"id": 1,
+		"name": "acar birası",
+		"description": "mmmm bu sıcak bile gider",
+		"price": {
+			"min": 5,
+			"max": 10,
+			"current": 7.71
+		}
+	},
+	{
+		"id": 2,
+		"name": "selçuk birası",
+		"description": "şimdilik sen onu içeceğini sanıyorsun",
+		"price": {
+			"min": 4,
+			"max": 8,
+			"current": 6.54
+		}
+	},
+	{
+		"id": 3,
+		"name": "doğa birası",
+		"description": "umarım kimliğin yanındadır genç çocuk",
+		"price": {
+			"min": 4,
+			"max": 11,
+			"current": 4.3
+		}
+	},
+	{
+		"id": 4,
+		"name": "*****ized",
+		"description": "feel it when it bounce",
+		"price": {
+			"min": 0,
+			"max": 10,
+			"current": 5
+		}
+	}
+]

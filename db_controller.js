@@ -1,13 +1,11 @@
 const {ObjectId} = require('mongodb')
 const mongo = require("mongodb").MongoClient
 
-const mongoURL = "mongodb://172.18.0.3:27017"
-const mongoAuth = {
-    auth: {
-        user: "root",
-        password: "example"
-    }
-}
+const dotenv = require('dotenv');
+dotenv.config();
+
+const mongoURL = process.env.MONGO_URL
+const mongoAuth = { useNewUrlParser: true }
 const dbname = "beerSE"
 
 function updatePrices(emitFunc) {
@@ -22,7 +20,7 @@ function updatePrices(emitFunc) {
             var averageProductCount = totalProduct / (doc.length ? 1 : doc.length)
             
             var op = doc.map((beer) => {
-                beer.price.current = beer.price.default * (averageProductCount / beer.quantity)
+                beer.price.current = (beer.price.default / doc.length) * (averageProductCount / beer.quantity)
                 beer.price.min = beer.price.current < beer.price.min ? beer.price.current : beer.price.min
                 beer.price.max = beer.price.current > beer.price.max ? beer.price.current : beer.price.max
 
@@ -69,7 +67,7 @@ function updateBeer(beer, emitFunc) {
         collection.updateOne(query, {
             $set: beer
         },  { upsert: true }).then(
-            updatePrices(emitFunc())
+            updatePrices(emitFunc)
         )
     })
 }
@@ -84,7 +82,7 @@ function deleteBeer(beer, emitFunc) {
 
         var collection = mClient.db(dbname).collection("beers")
         collection.deleteOne(query).then(
-            updatePrices(emitFunc())
+            updatePrices(emitFunc)
         )
     })
 }

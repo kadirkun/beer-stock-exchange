@@ -29,12 +29,21 @@ class App extends Component {
 			currentPage: PAGES.BEERS
 		}
 
+		this.connecToServer = this.connecToServer.bind(this)
 		this.addBeerToBasket = this.addBeerToBasket.bind(this)
 		this.removeBeerFromBasket = this.removeBeerFromBasket.bind(this)
 		this.placeOrderHandler = this.placeOrderHandler.bind(this)
 		this.pageChangeHandler = this.pageChangeHandler.bind(this)
 		this.pageController = this.pageController.bind(this)
 		this.init = this.init.bind(this)
+	}
+
+	connecToServer() {
+		fetch("/")
+	}
+
+	componentDidMount() {
+		this.connecToServer()
 	}
 
 	init(initDoc) {

@@ -1,4 +1,4 @@
-const API = require("../client/src/config/API.js")
+const API = require("./client/src/config/API.js")
 const db_controller = require("./db_controller")
 
 //setInterval(waver, 200, 4)

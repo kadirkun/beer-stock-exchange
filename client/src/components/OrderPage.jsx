@@ -9,27 +9,18 @@ class OrderPage extends Component {
     }
 
     prepareList(order) {
-        var beers = []
-        for (var beerId in order) {
-            var b = this.props.beers.find((beer) => {
-                return beer.id == beerId ? true : false
-            })
-            if (b != undefined) {
-                beers.push({
-                    info: b,
-                    quantity: order[beerId]
-                })
-            }
-        }
-
+        var beers = Object.keys(order).map((key) => {
+            return order[key]
+        })
+        
         return (beers.map(
             (beer) => (
                 <tr>
-                    <td>{beer.info.name}</td>
-                    <td>{beer.info.description}</td>
-                    <td>{beer.info.price.current}</td>
+                    <td>{beer.name}</td>
+                    <td>{beer.description}</td>
+                    <td>{beer.price.current}</td>
                     <td>{beer.quantity}</td>
-                    <td>{(beer.quantity * beer.info.price.current).toFixed(2)}</td>
+                    <td>{(beer.quantity * beer.price.current).toFixed(2)}</td>
                 </tr>
             )
         ))

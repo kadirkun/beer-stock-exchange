@@ -58,7 +58,14 @@ class App extends Component {
 	}
 
 	placeOrderHandler() {
-		placeOrder(this.state.orderList, this.state.clientDetails)
+		var preperedOrder = Object.keys(this.state.orderList).reduce((pre, key) => {
+			var beer = this.state.beerData.find((b) => {return b.id == key})
+			beer.quantity = this.state.orderList[key]
+			pre[key] = beer
+			return pre
+		}, {})
+
+		placeOrder(preperedOrder, this.state.clientDetails)
 		this.setState({
 			orderList: {}
 		})

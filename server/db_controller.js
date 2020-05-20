@@ -10,6 +10,37 @@ const mongoAuth = {
 }
 const dbname = "beerSE"
 
+function updatePrices(emitFunc) {
+    mongo.connect(mongoURL, mongoAuth, (err, mClient) => {
+        console.log("PRICE UPDATE")
+
+        var collection = mClient.db(dbname).collection("beers")
+        collection.find().toArray().then((doc) => {
+            var totalProduct = doc.reduce((pre, cur) => {
+                return pre + cur.quantity
+            }, 0)
+            var averageProductCount = totalProduct / (doc.length ? 1 : doc.length)
+            
+            var op = doc.map((beer) => {
+                beer.price.current = beer.price.default * (averageProductCount / beer.quantity)
+                beer.price.min = beer.price.current < beer.price.min ? beer.price.current : beer.price.min
+                beer.price.max = beer.price.current > beer.price.max ? beer.price.current : beer.price.max
+
+                return {
+                    updateOne: {
+                        filter: { id: beer.id },
+                        update: { $set: beer }
+                    }
+                }
+            })
+
+            collection.bulkWrite(op).then(
+                emitFunc()
+            )
+        })
+    })
+}
+
 function getOrders(emitFunc) {
     mongo.connect(mongoURL, mongoAuth, (err, mClient) => {
         console.log("GET ORDERS ")
@@ -38,7 +69,7 @@ function updateBeer(beer, emitFunc) {
         collection.updateOne(query, {
             $set: beer
         },  { upsert: true }).then(
-            emitFunc()
+            updatePrices(emitFunc())
         )
     })
 }
@@ -53,7 +84,7 @@ function deleteBeer(beer, emitFunc) {
 
         var collection = mClient.db(dbname).collection("beers")
         collection.deleteOne(query).then(
-            emitFunc()
+            updatePrices(emitFunc())
         )
     })
 }
@@ -99,14 +130,14 @@ function placeOrder(order, clientDetails, emitFunc) {
         bcollection.find(query).toArray().then((doc) => {
             console.log(doc)
             var enoughStorage = doc.map((beer) => {
-                return beer.quantity >= order[beer.id] ? true : false
+                return beer.quantity >= order[beer.id].quantity ? true : false
             }).reduce((pre, cur) => {
                 return pre && cur
             })
 
             if (enoughStorage) {
                 var op = doc.map((beer) => {
-                    beer.quantity -= order[beer.id]
+                    beer.quantity -= order[beer.id].quantity
                     return {
                         updateOne: {
                             filter: {id: beer.id},
@@ -120,7 +151,7 @@ function placeOrder(order, clientDetails, emitFunc) {
                         clientDetails,
                         order
                     }).then(
-                        emitFunc()
+                        updatePrices(emitFunc)
                     )
                 )
             } else {

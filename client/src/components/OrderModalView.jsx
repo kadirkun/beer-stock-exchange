@@ -4,6 +4,10 @@ import { Modal, Button, Table } from "react-bootstrap"
 class OrderView extends Component {
     constructor(props) {
         super(props)
+        
+        this.state = {
+            placeOrderState: false
+        }
 
         this.generateBeerList = this.generateBeerList.bind(this)
         this.placeOrderHandler = this.placeOrderHandler.bind(this)
@@ -20,22 +24,29 @@ class OrderView extends Component {
 
     generateBeerList() {
         var beers = []
+        var orderflag = true
         for (var beerId in this.props.orderList) {
             var b = this.props.beers.find((beer) => {
                 return beer.id == beerId ? true : false
             })
+            orderflag =  b.quantity >= this.props.orderList[beerId]
             beers.push({
                 info: b,
+                color: b.quantity < this.props.orderList[beerId] ? "text-danger" : "",
                 quantity: this.props.orderList[beerId]
-            })
+            }) 
+        }
+
+        this.state = {
+            placeOrderState: orderflag
         }
 
         return (beers.map(
             (beer) => (
-                <tr>
+                <tr className={beer.color}>
                     <td>{beer.info.name}</td>
                     <td>{beer.info.description}</td>
-                    <td>{beer.info.price.current}</td>
+                    <td>{beer.quantity}/{beer.info.quantity}</td>
                     <td>{beer.quantity}</td>
                     <td>{(beer.quantity * beer.info.price.current).toFixed(2)}</td>
                     <td>
@@ -47,7 +58,6 @@ class OrderView extends Component {
     }
 
     render() {
-
         return (
             <Modal
                 {...this.props}
@@ -66,7 +76,7 @@ class OrderView extends Component {
                             <tr>
                                 <th>Beer Name</th>
                                 <th>Description</th>
-                                <th>Price</th>
+                                <th>Stock</th>
                                 <th>Quantity</th>
                                 <th>Mid Total</th>
                                 <th></th>
@@ -79,7 +89,12 @@ class OrderView extends Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.props.onHide}>Close</Button>
-                    <Button onClick={this.placeOrderHandler}>Place Order</Button>
+                    {this.state.placeOrderState ? (
+                        <Button onClick={this.placeOrderHandler} >Place Order</Button>
+                    ) : (
+                        <Button variant="danger" disabled>Place Order</Button>
+                    )}
+                    
                 </Modal.Footer>
             </Modal>
 

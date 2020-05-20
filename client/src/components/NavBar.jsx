@@ -1,6 +1,8 @@
 import React, { Component } from "react"
 import {Navbar, Nav, Button, Badge} from "react-bootstrap"
-import OrderView from "./OrderView"
+import OrderModalView from "./OrderModalView"
+
+import PAGES from "../config/PAGES"
 
 class NavBar extends Component {
     constructor(props) {
@@ -44,20 +46,33 @@ class NavBar extends Component {
             <Navbar bg="dark" variant="dark" sticky="top">
                 <Navbar.Brand href="#home">Beer Stock Exchange</Navbar.Brand>
                 <Nav className="mr-auto">
-                    <Nav.Link href="#home">Beers</Nav.Link>
-                    <Nav.Link href="#features">Orders</Nav.Link>
+                    <Nav.Link 
+                        onClick={() => this.props.pageController(PAGES.BEERS)}
+                        className={this.props.currentPage == PAGES.BEERS ? "active" : ""}
+                    >Beers</Nav.Link>
+                    <Nav.Link 
+                        onClick={() => this.props.pageController(PAGES.ORDERS)}
+                        className={this.props.currentPage == PAGES.ORDERS ? "active" : ""}
+                    >Orders</Nav.Link>
                 </Nav>
-                <Button variant="light" onClick={this.orderButtonHandler}>
-                    Order <Badge variant="warning">{totalCost.toFixed(2)}</Badge>
-                </Button>
-                <OrderView
-                    show={this.state.orderViewVisibility}
-                    onHide={() => this.orderViewToggle(false)}
-                    beers={this.props.beers}
-                    orderList={this.props.orderList}
-                    removeBeer={this.props.removeBeer}
-                    placeOrder={this.props.placeOrder}
-                />
+                {
+                    this.props.clientDetails.admin ? 
+                    (<div></div>) : (
+                        <div>
+                            <Button variant="light" onClick={this.orderButtonHandler}>
+                                Order <Badge variant="warning">{totalCost.toFixed(2)}</Badge>
+                            </Button>
+                            <OrderModalView
+                                show={this.state.orderViewVisibility}
+                                onHide={() => this.orderViewToggle(false)}
+                                beers={this.props.beers}
+                                orderList={this.props.orderList}
+                                removeBeer={this.props.removeBeer}
+                                placeOrder={this.props.placeOrder}
+                            />
+                        </div>
+                    )
+                }
             </Navbar>
             
         )

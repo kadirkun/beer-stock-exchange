@@ -17,7 +17,7 @@ class MenuItem extends Component {
     render() {
         const beer = this.props.beer
         return (
-            <Card style={{ width: '18rem' }}>
+            <Card md={2}>
                 <Card.Img variant="top" src={beerImg} />
                 <Card.Body>
                     <Card.Title>{beer.name}</Card.Title>

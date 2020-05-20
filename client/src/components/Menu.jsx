@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import {CardColumns} from "react-bootstrap"
 import MenuItem from "./MenuItem"
 
 class Menu extends Component {
@@ -9,21 +10,21 @@ class Menu extends Component {
 
     card_create(card) {
         return (
-            <div className="col mb-4">
+            <>
                 {card}
-            </div>
+            </>
         )
     }
 
     render() {
         return (
-            <div className="album py-5 bg-light">
+            <div className="">
                 <div className="container">
-                    <div className="row row-cols-1 row-cols-md-3">
+                    <CardColumns className="p-5">
                         {this.props.beers.map((beer) => (
-                            this.card_create(<MenuItem beer={beer} addBeer={this.props.addBeer}/>)
+                            this.card_create(<MenuItem beer={beer} orderList={this.props.orderList} addBeer={this.props.addBeer}/>)
                         ))}
-                    </div>
+                    </CardColumns>
                 </div>
             </div>
         )

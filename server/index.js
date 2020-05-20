@@ -5,5 +5,5 @@ var config = require("../client/src/config/server.json")
 
 const PORT = config.port
 
-io.on("connection", socket)
+io.on("connection", (soc) => socket(soc, io))
 io.listen(PORT)

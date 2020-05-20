@@ -16,6 +16,7 @@ class MenuItem extends Component {
 
     render() {
         const beer = this.props.beer
+
         return (
             <Card md={2}>
                 <Card.Img variant="top" src={beerImg} />
@@ -26,12 +27,17 @@ class MenuItem extends Component {
                     </Card.Text>
                 </Card.Body>
                 <ListGroup className="list-group-flush">
-                    <ListGroupItem variant="danger">Max: {beer.price.max}</ListGroupItem>
-                    <ListGroupItem variant="warning">Current: {beer.price.current}</ListGroupItem>
-                    <ListGroupItem variant="success">Min: {beer.price.min}</ListGroupItem>
+                    <ListGroupItem variant="danger">Max: {this.props.beer.quantity ? beer.price.max.toFixed(2) : "No Price"}</ListGroupItem>
+                    <ListGroupItem variant="warning">Current: {this.props.beer.quantity ? beer.price.current.toFixed(2) : "No Price"}</ListGroupItem>
+                    <ListGroupItem variant="success">Min: {this.props.beer.quantity ? beer.price.min.toFixed(2) : "No Price"}</ListGroupItem>
                 </ListGroup>
                 <Card.Body>
-                    <Button variant="primary" onClick={this.addBeerHandler} block>Bring Me</Button>
+                    {
+                        this.props.beer.quantity ? 
+                        <Button variant="primary" onClick={this.addBeerHandler} block>Bring Me</Button> :
+                        <Button variant="primary" block disabled>Bring Me</Button>
+
+                    }
                 </Card.Body>
             </Card>
         )

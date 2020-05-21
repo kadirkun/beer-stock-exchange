@@ -29,7 +29,7 @@ class OrderView extends Component {
             var b = this.props.beers.find((beer) => {
                 return beer.id == beerId ? true : false
             })
-            orderflag =  b.quantity >= this.props.orderList[beerId]
+            orderflag &=  b.quantity >= this.props.orderList[beerId]
             beers.push({
                 info: b,
                 color: b.quantity < this.props.orderList[beerId] ? "text-danger" : "",

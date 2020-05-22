@@ -4,7 +4,7 @@
   "description": "",
   "engines": {
     "node": "12.16.x"
-  }
+  },
   "main": "index.js",
   "scripts": {
     "client-install": "npm install --prefix client",
